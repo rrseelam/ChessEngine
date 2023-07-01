@@ -87,15 +87,21 @@ class Board:
         self.locations[7, 7] = Rook     (7, 7, 'B')
 
     def get_board_state(self):
+        output = np.empty(64, dtype=object)
+        output.shape = (8, 8)
+        print(output.shape)
+        for i in range(8):
+            for j in range(8):
+                output[i, j] = self.locations[i, j].get_id()
+        return output
+
+    def print_board(self):
         output = ""
         for i in range(8):
             for j in range(8):
                 output += self.locations[i, j].get_id()
             output += '\n'
-        return output
-
-    def print_board(self):
-        print(self.get_board_state())
+        print(output)
 
 
     def toggle_turn(self):
