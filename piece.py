@@ -43,6 +43,12 @@ class Pawn(Piece):
         # currently cannot handle changing to queen at the end of the board
         # pawns also cant take pieces
 
+        if state[self.rank + 1][self.file + 1].get_id() != '.' and state[self.rank + 1][self.file + 1].get_color() != self.color:
+            res.append((self.rank + 1, self.file + 1))
+
+        if state[self.rank + 1][self.file - 1].get_id() != '.' and state[self.rank + 1][self.file - 1].get_color() != self.color:
+            res.append((self.rank + 1, self.file - 1))
+
         if state[self.rank + 1][self.file].get_id() == '.':
             res.append((self.rank, self.file + 1))
 

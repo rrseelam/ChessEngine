@@ -28,6 +28,7 @@ class Board:
         self.locations[0][5] = Bishop  (0, 5, 'W')
         self.locations[0][6] = Knight  (0, 6, 'W')
         self.locations[0][7] = Rook    (0, 7, 'W')
+
         self.locations[1][0] = Pawn    (1, 0, 'W')
         self.locations[1][1] = Pawn    (1, 1, 'W')
         self.locations[1][2] = Pawn    (1, 2, 'W')
@@ -36,6 +37,7 @@ class Board:
         self.locations[1][5] = Pawn    (1, 5, 'W')
         self.locations[1][6] = Pawn    (1, 6, 'W')
         self.locations[1][7] = Pawn    (1, 7, 'W')
+
         self.locations[2][0] = Blank   (2, 0, 'W')
         self.locations[2][1] = Blank   (2, 1, 'W')
         self.locations[2][2] = Blank   (2, 2, 'W')
@@ -44,6 +46,7 @@ class Board:
         self.locations[2][5] = Blank   (2, 5, 'W')
         self.locations[2][6] = Blank   (2, 6, 'W')
         self.locations[2][7] = Blank   (2, 7, 'W')
+
         self.locations[3][0] = Blank   (3, 0, 'W')
         self.locations[3][1] = Blank   (3, 1, 'W')
         self.locations[3][2] = Blank   (3, 2, 'W')
@@ -52,6 +55,7 @@ class Board:
         self.locations[3][5] = Blank   (3, 5, 'W')
         self.locations[3][6] = Blank   (3, 6, 'W')
         self.locations[3][7] = Blank   (3, 7, 'W')
+
         self.locations[4][0] = Blank   (4, 0, 'W')
         self.locations[4][1] = Blank   (4, 1, 'W')
         self.locations[4][2] = Blank   (4, 2, 'W')
@@ -60,6 +64,7 @@ class Board:
         self.locations[4][5] = Blank   (4, 5, 'W')
         self.locations[4][6] = Blank   (4, 6, 'W')
         self.locations[4][7] = Blank   (4, 7, 'W')
+
         self.locations[5][0] = Blank   (5, 0, 'W')
         self.locations[5][1] = Blank   (5, 1, 'W')
         self.locations[5][2] = Blank   (5, 2, 'W')
@@ -68,6 +73,7 @@ class Board:
         self.locations[5][5] = Blank   (5, 5, 'W')
         self.locations[5][6] = Blank   (5, 6, 'W')
         self.locations[5][7] = Blank   (5, 7, 'W')
+
         self.locations[6][0] = Pawn    (6, 0, 'B')
         self.locations[6][1] = Pawn    (6, 1, 'B')
         self.locations[6][2] = Pawn    (6, 2, 'B')
@@ -76,6 +82,7 @@ class Board:
         self.locations[6][5] = Pawn    (6, 5, 'B')
         self.locations[6][6] = Pawn    (6, 6, 'B')
         self.locations[6][7] = Pawn    (6, 7, 'B')
+        
         self.locations[7][0] = Rook    (7, 0, 'B')
         self.locations[7][1] = Knight  (7, 1, 'B')
         self.locations[7][2] = Bishop  (7, 2, 'B')
