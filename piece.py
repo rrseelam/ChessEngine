@@ -40,11 +40,14 @@ class Pawn(Piece):
 
     def get_moves(self, state):
         res = []
-        if state[self.rank, self.file + 1] == '.':
+        # currently cannot handle changing to queen at the end of the board
+        # pawns also cant take pieces
+
+        if state[self.rank + 1][self.file].get_id() == '.':
             res.append((self.rank, self.file + 1))
 
-        if self.first_move and state[self.rank, self.file + 2] == '.':
-            res.append((self.rank, self.file + 2))
+        if self.first_move and state[self.rank + 2][self.file].get_id() == '.':
+            res.append((self.rank + 2, self.file))
 
         return res
 
@@ -76,7 +79,7 @@ class Knight(Piece):
                 continue
             if file > 7 or file < 0:
                 continue
-            if state[rank, file].get_id() != '.' and state[rank, file].get_color() == self.color:
+            if state[rank][file].get_id() != '.' and state[rank][file].get_color() == self.color:
                 continue
             res.append((rank, file))
 
@@ -100,13 +103,13 @@ class Bishop(Piece):
         right = 1
         while (self.rank + up <= 7 and self.file + right <= 7):
 
-            if state[self.rank + up, self.file + right].get_id() == '.':
+            if state[self.rank + up][self.file + right].get_id() == '.':
                 res.append((self.rank + up, self.file + right))
                 up += 1
                 right += 1
                 continue
 
-            if state[self.rank + up, self.file + right].get_color() != self.color:
+            if state[self.rank + up][self.file + right].get_color() != self.color:
                 res.append((self.rank + up, self.file + right))
 
             break
@@ -116,13 +119,13 @@ class Bishop(Piece):
         left = -1
         while (self.rank + up <= 7 and self.file + left >= 0):
 
-            if state[self.rank + up, self.file + left].get_id() == '.':
+            if state[self.rank + up][self.file + left].get_id() == '.':
                 res.append((self.rank + up, self.file + left))
                 up += 1
                 left -= 1
                 continue
 
-            if state[self.rank + up, self.file + left].get_color() != self.color:
+            if state[self.rank + up][self.file + left].get_color() != self.color:
                 res.append((self.rank + up, self.file + left))
 
             break
@@ -132,13 +135,13 @@ class Bishop(Piece):
         right = 1
         while (self.rank + down >= 0 and self.file + right <= 7):
 
-            if state[self.rank + down, self.file + right].get_id() == '.':
+            if state[self.rank + down][self.file + right].get_id() == '.':
                 res.append((self.rank + down, self.file + right))
                 down -= 1
                 right += 1
                 continue
 
-            if state[self.rank + down, self.file + right].get_color() != self.color:
+            if state[self.rank + down][self.file + right].get_color() != self.color:
                 res.append((self.rank + down, self.file + right))
 
             break
@@ -148,13 +151,13 @@ class Bishop(Piece):
         left = -1
         while (self.rank + down >= 0 and self.file + left >= 0):
 
-            if state[self.rank + down, self.file + left].get_id() == '.':
+            if state[self.rank + down][self.file + left].get_id() == '.':
                 res.append((self.rank + down, self.file + left))
                 down -= 1
                 left -= 1
                 continue
 
-            if state[self.rank + down, self.file + left].get_color() != self.color:
+            if state[self.rank + down][self.file + left].get_color() != self.color:
                 res.append((self.rank + down, self.file + left))
 
             break
@@ -177,49 +180,49 @@ class Rook(Piece):
         # looking right
         pos_file = self.file + 1
         while (pos_file <= 7):
-            if state[self.rank, pos_file].get_id() == '.':
+            if state[self.rank][pos_file].get_id() == '.':
                 res.append((self.rank, pos_file))
                 pos_file += 1
-            elif state[self.rank, pos_file].get_color() != self.color:
+            elif state[self.rank][pos_file].get_color() != self.color:
                 res.append((self.rank, pos_file))
                 break
-            elif state[self.rank, pos_file].get_color() == self.color:
+            elif state[self.rank][pos_file].get_color() == self.color:
                 break
 
         # looking left
         pos_file = self.file - 1
         while (pos_file >= 0):
-            if state[self.rank, pos_file].get_id() == '.':
+            if state[self.rank][pos_file].get_id() == '.':
                 res.append((self.rank, pos_file))
                 pos_file -= 1
-            elif state[self.rank, pos_file].get_color() != self.color:
+            elif state[self.rank][pos_file].get_color() != self.color:
                 res.append((self.rank, pos_file))
                 break
-            elif state[self.rank, pos_file].get_color() == self.color:
+            elif state[self.rank][pos_file].get_color() == self.color:
                 break
 
         # looking up
         pos_rank = self.rank + 1
         while (pos_rank <= 7):
-            if state[pos_rank, self.rank].get_id() == '.':
+            if state[pos_rank][self.rank].get_id() == '.':
                 res.append((pos_rank, self.rank))
                 pos_rank += 1
-            elif state[pos_rank, self.rank].get_color() != self.color:
+            elif state[pos_rank][self.rank].get_color() != self.color:
                 res.append((pos_rank, self.rank))
                 break
-            elif state[pos_rank, self.rank].get_color() == self.color:
+            elif state[pos_rank][self.rank].get_color() == self.color:
                 break
 
         # looking down
         pos_rank = self.rank + 1
         while (pos_rank >= 0):
-            if state[pos_rank, self.rank].get_id() == '.':
+            if state[pos_rank][self.rank].get_id() == '.':
                 res.append((pos_rank, self.rank))
                 pos_rank -= 1
-            elif state[pos_rank, self.rank].get_color() != self.color:
+            elif state[pos_rank][self.rank].get_color() != self.color:
                 res.append((pos_rank, self.rank))
                 break
-            elif state[pos_rank, self.rank].get_color() == self.color:
+            elif state[pos_rank][self.rank].get_color() == self.color:
                 break
 
         return res
@@ -242,13 +245,13 @@ class Queen(Piece):
         right = 1
         while (self.rank + up <= 7 and self.file + right <= 7):
 
-            if state[self.rank + up, self.file + right].get_id() == '.':
+            if state[self.rank + up][self.file + right].get_id() == '.':
                 res.append((self.rank + up, self.file + right))
                 up += 1
                 right += 1
                 continue
 
-            if state[self.rank + up, self.file + right].get_color() != self.color:
+            if state[self.rank + up][self.file + right].get_color() != self.color:
                 res.append((self.rank + up, self.file + right))
 
             break
@@ -258,13 +261,13 @@ class Queen(Piece):
         left = -1
         while (self.rank + up <= 7 and self.file + left >= 0):
 
-            if state[self.rank + up, self.file + left].get_id() == '.':
+            if state[self.rank + up][self.file + left].get_id() == '.':
                 res.append((self.rank + up, self.file + left))
                 up += 1
                 left -= 1
                 continue
 
-            if state[self.rank + up, self.file + left].get_color() != self.color:
+            if state[self.rank + up][self.file + left].get_color() != self.color:
                 res.append((self.rank + up, self.file + left))
 
             break
@@ -274,13 +277,13 @@ class Queen(Piece):
         right = 1
         while (self.rank + down >= 0 and self.file + right <= 7):
 
-            if state[self.rank + down, self.file + right].get_id() == '.':
+            if state[self.rank + down][self.file + right].get_id() == '.':
                 res.append((self.rank + down, self.file + right))
                 down -= 1
                 right += 1
                 continue
 
-            if state[self.rank + down, self.file + right].get_color() != self.color:
+            if state[self.rank + down][self.file + right].get_color() != self.color:
                 res.append((self.rank + down, self.file + right))
 
             break
@@ -290,13 +293,13 @@ class Queen(Piece):
         left = -1
         while (self.rank + down >= 0 and self.file + left >= 0):
 
-            if state[self.rank + down, self.file + left].get_id() == '.':
+            if state[self.rank + down][self.file + left].get_id() == '.':
                 res.append((self.rank + down, self.file + left))
                 down -= 1
                 left -= 1
                 continue
 
-            if state[self.rank + down, self.file + left].get_color() != self.color:
+            if state[self.rank + down][self.file + left].get_color() != self.color:
                 res.append((self.rank + down, self.file + left))
 
             break
@@ -304,51 +307,51 @@ class Queen(Piece):
         # looking right
         pos_file = self.file + 1
         while (pos_file <= 7):
-            if state[self.rank, pos_file].get_id() == '.':
+            if state[self.rank][pos_file].get_id() == '.':
                 res.append((self.rank, pos_file))
                 pos_file += 1
-            elif state[self.rank, pos_file].get_color() != self.color:
+            elif state[self.rank][pos_file].get_color() != self.color:
                 res.append((self.rank, pos_file))
                 break
-            elif state[self.rank, pos_file].get_color() == self.color:
+            elif state[self.rank][pos_file].get_color() == self.color:
                 break
 
         # looking left
         pos_file = self.file - 1
         while (pos_file >= 0):
-            if state[self.rank, pos_file].get_id() == '.':
+            if state[self.rank][pos_file].get_id() == '.':
                 res.append((self.rank, pos_file))
                 pos_file -= 1
-            elif state[self.rank, pos_file].get_color() != self.color:
+            elif state[self.rank][pos_file].get_color() != self.color:
                 res.append((self.rank, pos_file))
                 break
-            elif state[self.rank, pos_file].get_color() == self.color:
+            elif state[self.rank][pos_file].get_color() == self.color:
                 break
 
         # looking up
         pos_rank = self.rank + 1
         while (pos_rank <= 7):
-            if state[pos_rank, self.rank].get_id() == '.':
+            if state[pos_rank][self.rank].get_id() == '.':
                 res.append((pos_rank, self.rank))
                 pos_rank += 1
-            elif state[pos_rank, self.rank].get_color() != self.color:
+            elif state[pos_rank][self.rank].get_color() != self.color:
                 res.append((pos_rank, self.rank))
                 break
-            elif state[pos_rank, self.rank].get_color() == self.color:
+            elif state[pos_rank][self.rank].get_color() == self.color:
                 break
 
         # looking down
         pos_rank = self.rank + 1
         while (pos_rank >= 0):
-            if state[pos_rank, self.rank].get_id() == '.':
+            if state[pos_rank][self.rank].get_id() == '.':
                 res.append((pos_rank, self.rank))
                 pos_rank -= 1
-            elif state[pos_rank, self.rank].get_color() != self.color:
+            elif state[pos_rank][self.rank].get_color() != self.color:
                 res.append((pos_rank, self.rank))
                 break
-            elif state[pos_rank, self.rank].get_color() == self.color:
+            elif state[pos_rank][self.rank].get_color() == self.color:
                 break
-
+       
         return res
 
     def get_id(self):
@@ -373,9 +376,11 @@ class King(Piece):
                 continue
             if file > 7 or file < 0:
                 continue
-            if state[rank, file].get_id() != '.' and state[rank, file].get_color() == self.color:
+            if state[rank][file].get_id() != '.' and state[rank][file].get_color() == self.color:
                 continue
             res.append((rank, file))
+
+        return res
 
     def get_id(self):
         return 'K'
