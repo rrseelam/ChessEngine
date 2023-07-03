@@ -1,10 +1,11 @@
 
 class Piece:
 
-    def __init__(self, rank, file, color):
+    def __init__(self, rank, file, color, board):
         self.rank = rank      # 0 - 7
         self.file = file      # 0 - 7
         self.color = color    # 'W' or 'B'
+        self.board = board
 
     def get_location(self):
         return (self.rank, self.file)
@@ -12,9 +13,9 @@ class Piece:
     def get_moves(self, state):
         return []
 
-    def move(self, rank, file):
-        self.rank = rank
-        self.file = file
+    def move_piece(self, r, f):
+        self.rank = r
+        self.file = f
 
     def get_id(self):
         return 'T'
@@ -25,8 +26,11 @@ class Piece:
 
 class Blank(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
+
+    def get_moves():
+        return []
 
     def get_id(self):
         return '.'
@@ -34,12 +38,13 @@ class Blank(Piece):
 
 class Pawn(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
         self.first_move = True
 
-    def get_moves(self, state):
+    def get_moves(self):
         res = []
+        state = self.board.locations
         # currently cannot handle changing to queen at the end of the board
         # pawns also cant take pieces
 
@@ -50,16 +55,16 @@ class Pawn(Piece):
             res.append((self.rank + 1, self.file - 1))
 
         if state[self.rank + 1][self.file].get_id() == '.':
-            res.append((self.rank, self.file + 1))
+            res.append((self.rank + 1, self.file))
 
         if self.first_move and state[self.rank + 2][self.file].get_id() == '.':
             res.append((self.rank + 2, self.file))
 
         return res
 
-    def move(self, rank, file):
-        self.rank = rank
-        self.file = file
+    def move_piece(self, r, f):
+        self.rank = r
+        self.file = f
         self.first_move = False
 
     def get_id(self):
@@ -68,10 +73,12 @@ class Pawn(Piece):
 
 class Knight(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
 
-    def get_moves(self, state):
+    def get_moves(self):
+
+        state = self.board.locations
 
         pos = [(self.rank + 2, self.file + 1), (self.rank + 2, self.file - 1),
                (self.rank - 2, self.file + 1), (self.rank - 2, self.file - 2),
@@ -97,12 +104,13 @@ class Knight(Piece):
 
 class Bishop(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
 
-    def get_moves(self, state):
+    def get_moves(self):
 
         res = []
+        state = self.board.locations
 
         # up-right diagonal
         up = 1
@@ -176,12 +184,13 @@ class Bishop(Piece):
 
 class Rook(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
 
-    def get_moves(self, state):
+    def get_moves(self):
 
         res = []
+        state = self.board.locations
 
         # looking right
         pos_file = self.file + 1
@@ -239,11 +248,12 @@ class Rook(Piece):
 
 class Queen(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
 
-    def get_moves(self, state):
+    def get_moves(self):
 
+        state = self.board.locations
         res = []
 
         # up-right diagonal
@@ -366,10 +376,12 @@ class Queen(Piece):
 
 class King(Piece):
 
-    def __init__(self, rank, file, color):
-        super().__init__(rank, file, color)
+    def __init__(self, rank, file, color, board):
+        super().__init__(rank, file, color, board)
 
-    def get_moves(self, state):
+    def get_moves(self):
+
+        state = self.board.locations
 
         pos = [(self.rank + 1, self.file - 1), (self.rank + 1, self.file), (self.rank + 1, self.file + 1),
                (self.rank, self.file - 1), (self.rank, self.file + 1),
