@@ -51,18 +51,17 @@ class Pawn(Piece):
         res = []
         state = self.board.locations
         # currently cannot handle changing to queen at the end of the board
-        # currently cannot move black pawns because its always + 1
-
-        if state[self.rank + 1][self.file + 1].get_id() != '.' and state[self.rank + 1][self.file + 1].get_color() != self.color:
+     
+        if self.rank < 7 and self.file < 7 and state[self.rank + 1][self.file + 1].get_id() != '.' and state[self.rank + 1][self.file + 1].get_color() != self.color:
             res.append((self.rank + 1, self.file + 1))
 
-        if state[self.rank + 1][self.file - 1].get_id() != '.' and state[self.rank + 1][self.file - 1].get_color() != self.color:
+        if self.rank < 7 and self.file > 0 and state[self.rank + 1][self.file - 1].get_id() != '.' and state[self.rank + 1][self.file - 1].get_color() != self.color:
             res.append((self.rank + 1, self.file - 1))
 
-        if state[self.rank + 1][self.file].get_id() == '.':
+        if self.rank < 7 and state[self.rank + 1][self.file].get_id() == '.':
             res.append((self.rank + 1, self.file))
 
-        if self.first_move and state[self.rank + 2][self.file].get_id() == '.':
+        if self.rank < 6 and self.first_move and state[self.rank + 2][self.file].get_id() == '.':
             res.append((self.rank + 2, self.file))
 
         return res
@@ -71,18 +70,17 @@ class Pawn(Piece):
         res = []
         state = self.board.locations
         # currently cannot handle changing to queen at the end of the board
-        # currently cannot move black pawns because its always + 1
-
-        if state[self.rank - 1][self.file + 1].get_id() != '.' and state[self.rank - 1][self.file + 1].get_color() != self.color:
+   
+        if self.rank > 0 and self.file < 7 and state[self.rank - 1][self.file + 1].get_id() != '.' and state[self.rank - 1][self.file + 1].get_color() != self.color:
             res.append((self.rank - 1, self.file + 1))
 
-        if state[self.rank - 1][self.file - 1].get_id() != '.' and state[self.rank - 1][self.file - 1].get_color() != self.color:
+        if self.rank > 0 and self.file > 0 and state[self.rank - 1][self.file - 1].get_id() != '.' and state[self.rank - 1][self.file - 1].get_color() != self.color:
             res.append((self.rank - 1, self.file - 1))
 
-        if state[self.rank - 1][self.file].get_id() == '.':
+        if self.rank > 0 and state[self.rank - 1][self.file].get_id() == '.':
             res.append((self.rank - 1, self.file))
 
-        if self.first_move and state[self.rank - 2][self.file].get_id() == '.':
+        if self.rank > 1 and self.first_move and state[self.rank - 2][self.file].get_id() == '.':
             res.append((self.rank - 2, self.file))
 
         return res

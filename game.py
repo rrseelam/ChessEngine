@@ -14,7 +14,6 @@ while True:
     er = int(input("er = "))
     ef = int(input("ef = "))
 
-
     if game.move(sr, sf, er, ef):
         print("")
         game.print_board()
