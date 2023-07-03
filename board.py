@@ -1,5 +1,6 @@
-import numpy as np
+
 from piece import Piece, Blank, Pawn, Knight, Bishop, Rook, Queen, King
+
 
 class Board:
 
@@ -107,9 +108,18 @@ class Board:
        return self.locations[rank][file].get_moves()
     
     def move(self, sr, sf, er, ef):
+        
+        if self.locations[sr][sf].color != self.turn:
+            return False
+        
+        if (er, ef) not in self.locations[sr][sf].get_moves():
+            return False
+        
         self.locations[er][ef] = self.locations[sr][sf]
         self.locations[er][ef].move_piece(er, ef)
         self.locations[sr][sf] = Blank(sr, sf, 'W', self)
+        self.toggle_turn()
+        return True
 
 
     def toggle_turn(self):
@@ -132,5 +142,13 @@ if __name__ == '__main__':
     print("Bishop", sample.get_moves(0, 2))
     print("Queen",  sample.get_moves(0, 3))
     print("King",   sample.get_moves(0, 4))
+    print("Pawn",   sample.get_moves(1, 1))
+
+    print("")
+    sample.move(1, 1, 3, 1)
+    sample.move(0, 1, 2, 2)
+
+    sample.print_board()
+  
     print("Pawn",   sample.get_moves(1, 1))
 

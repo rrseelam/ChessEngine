@@ -29,7 +29,7 @@ class Blank(Piece):
     def __init__(self, rank, file, color, board):
         super().__init__(rank, file, color, board)
 
-    def get_moves():
+    def get_moves(self):
         return []
 
     def get_id(self):
@@ -43,10 +43,15 @@ class Pawn(Piece):
         self.first_move = True
 
     def get_moves(self):
+        if self.color == 'W':
+            return self.get_moves_white()
+        return self.get_moves_black()
+    
+    def get_moves_white(self):
         res = []
         state = self.board.locations
         # currently cannot handle changing to queen at the end of the board
-        # pawns also cant take pieces
+        # currently cannot move black pawns because its always + 1
 
         if state[self.rank + 1][self.file + 1].get_id() != '.' and state[self.rank + 1][self.file + 1].get_color() != self.color:
             res.append((self.rank + 1, self.file + 1))
@@ -59,6 +64,26 @@ class Pawn(Piece):
 
         if self.first_move and state[self.rank + 2][self.file].get_id() == '.':
             res.append((self.rank + 2, self.file))
+
+        return res
+    
+    def get_moves_black(self):
+        res = []
+        state = self.board.locations
+        # currently cannot handle changing to queen at the end of the board
+        # currently cannot move black pawns because its always + 1
+
+        if state[self.rank - 1][self.file + 1].get_id() != '.' and state[self.rank - 1][self.file + 1].get_color() != self.color:
+            res.append((self.rank - 1, self.file + 1))
+
+        if state[self.rank - 1][self.file - 1].get_id() != '.' and state[self.rank - 1][self.file - 1].get_color() != self.color:
+            res.append((self.rank - 1, self.file - 1))
+
+        if state[self.rank - 1][self.file].get_id() == '.':
+            res.append((self.rank - 1, self.file))
+
+        if self.first_move and state[self.rank - 2][self.file].get_id() == '.':
+            res.append((self.rank - 2, self.file))
 
         return res
 
@@ -357,7 +382,7 @@ class Queen(Piece):
                 break
 
         # looking down
-        pos_rank = self.rank + 1
+        pos_rank = self.rank - 1
         while (pos_rank >= 0):
             if state[pos_rank][self.rank].get_id() == '.':
                 res.append((pos_rank, self.rank))
