@@ -1,7 +1,7 @@
-
+from board import Board
 class Piece:
 
-    def __init__(self, rank, file, color, board):
+    def __init__(self, rank, file, color, board: Board):
         self.rank = rank      # 0 - 7
         self.file = file      # 0 - 7
         self.color = color    # 'W' or 'B'
@@ -402,7 +402,7 @@ class King(Piece):
     def __init__(self, rank, file, color, board):
         super().__init__(rank, file, color, board)
 
-    def get_moves(self):
+    def get_moves(self) -> list:
 
         state = self.board.locations
 
@@ -422,6 +422,144 @@ class King(Piece):
             res.append((rank, file))
 
         return res
+    
+    #returns whether the position is a valid board position   
+    def validposition(rank, file) -> bool:
+        if (rank >= 0 and rank <= 7) and (file >= 0 and file <= 7):
+            return True
+        else:
+            return False
+    
+    #returns a bool indicating whether the King is in check
+    def check(self) -> bool:
+        state = self.board.locations
+
+        possible_positions = {
+            'P': [(1,-1), (1,1)],
+            'N': [(2, 1), (2,-1),(-2, 1), (-2, -2),
+                  (1, 2), (1, -2), (-1, 2), (1, -2)],
+        }
+        
+        #checks pawn and knight positions
+        for key, value in possible_positions.items():
+            for pos in value:
+                checkrank, checkfile = self.rank + pos[0], self.file + pos[1]
+                if self.validposition(checkrank, checkfile) and state[checkrank][checkfile].get_id() == key:
+                    if state[checkrank][checkfile].get_color() != self.color:
+                        return True
+                        
+            
+        #check rook, bishop, and queen positions
+        #rook + queen checks    
+        #check upwards
+        up = self.file + 1
+        while up <= 7:
+            current_piece = state[self.rank][up]
+            if current_piece.get_id() == '.':
+                up += 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'R' or current_piece.get_id() == 'Q':
+                        return True
+                break
+        
+        #check downwards
+        down = self.file - 1
+        while down >= 0:
+            current_piece = state[self.rank][down]
+            if current_piece.get_id() == '.':
+                down -= 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'R' or current_piece.get_id() == 'Q':
+                        return True
+                break
+            
+        #check right
+        right = self.rank + 1
+        while right <= 7:
+            current_piece = state[right][self.file]
+            if current_piece.get_id() == '.':
+                right += 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'R' or current_piece.get_id() == 'Q':
+                        return True
+                break
+            
+        #check left
+        left = self.rank - 1
+        while left >= 0:
+            current_piece = state[left][self.file]
+            if current_piece.get_id() == '.':
+                left -= 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'R' or current_piece.get_id() == 'Q':
+                        return True
+                break
+        
+        #bishop + queen checks
+        # up-right diagonal
+        right = 1
+        up = 1
+        while (self.validposition(self.rank + right, self.file + up)):
+            current_piece = state[self.rank + right][self.file + up]
+            if current_piece.get_id() == '.':
+                right += 1
+                up += 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'B' or current_piece.get_id() == 'Q':
+                        return True
+                break            
+        
+        # up-left diagonal
+        left = -1
+        up = 1
+        while (self.validposition(self.rank + left, self.file + up)):
+            current_piece = state[self.rank + left][self.file + up]
+            if current_piece.get_id() == '.':
+                left -= 1
+                up += 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'B' or current_piece.get_id() == 'Q':
+                        return True
+                break
+            
+        # down-right diagonal
+        right = 1
+        down = -1
+        while (self.validposition(self.rank + right, self.file + down)):
+            current_piece = state[self.rank + right][self.file + down]
+            if current_piece.get_id() == '.':
+                right += 1
+                down -= 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'B' or current_piece.get_id() == 'Q':
+                        return True
+                break            
+        
+        # down-left diagonal
+        left = -1
+        down = -1
+        while (self.validposition(self.rank + left, self.file + down)):
+            current_piece = state[self.rank + left][self.file + down]
+            if current_piece.get_id() == '.':
+                left -= 1
+                down -= 1
+            else:
+                if current_piece.get_color() != self.color:
+                    if current_piece.get_id() == 'B' or current_piece.get_id() == 'Q':
+                        return True
+                break  
+
+        return False
+        
+        
+
 
     def get_id(self):
         return 'K'
