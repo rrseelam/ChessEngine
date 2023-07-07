@@ -214,14 +214,14 @@ class Board:
         right = 1
         while (self.validposition((r + right, f + up))):
 
-            if self.locations[r+up][f+right] == ' ':
-                res.append((r + up, f + right))
+            if self.locations[r+right][f+up] == ' ':
+                res.append((r + right, f + up))
                 up += 1
                 right += 1
                 continue
 
-            if self.get_loc[r + up][f + right][1] != color:
-                res.append((r + up, f + right))
+            if self.locations[r + right][f + up][1] != color:
+                res.append((r + right, f + up))
 
             break
 
@@ -230,14 +230,14 @@ class Board:
         left = -1
         while (self.validposition((r + left, f + up))):
 
-            if self.locations[r + up][f + left][0] == ' ':
-                res.append((r + up, f + left))
+            if self.locations[r + left][f + up][0] == ' ':
+                res.append((r + left, f + up))
                 up += 1
                 left -= 1
                 continue
 
-            if self.locations[r + up][f + left][1] != color:
-                res.append((r + up, f + left))
+            if self.locations[r + left][f + up][1] != color:
+                res.append((r + left, f + up))
 
             break
 
@@ -246,14 +246,14 @@ class Board:
         right = 1
         while (self.validposition((r + right, f + down))):
 
-            if self.locations[r + down][f + right][0] == ' ':
-                res.append((r + down, f + right))
+            if self.locations[r + right][f + down][0] == ' ':
+                res.append((r + right, f + down))
                 down -= 1
                 right += 1
                 continue
 
-            if self.locations[r + down][f + right][1] != color:
-                res.append((r + down, f + right))
+            if self.locations[r + right][f + down][1] != color:
+                res.append((r + right, f + down))
 
             break
 
@@ -262,14 +262,14 @@ class Board:
         left = -1
         while (self.validposition((r + left, f + down))):
 
-            if self.locations[r + down][f + left][0] == ' ':
-                res.append((r + down, f + left))
+            if self.locations[r + left][f + down][0] == ' ':
+                res.append((r + left, f + down))
                 down -= 1
                 left -= 1
                 continue
 
-            if self.locations[r + down][f + left][1] != color:
-                res.append((r + down, f + left))
+            if self.locations[r + left][f + down][1] != color:
+                res.append((r + left, f + down))
 
             break
 
@@ -281,7 +281,7 @@ class Board:
         
         # looking right
         right = 1
-        while (self.validposition(r + right, f)):
+        while (self.validposition((r + right, f))):
 
             if self.locations[r + right][f][0] == ' ':
                 res.append((r + right, f))
@@ -295,7 +295,7 @@ class Board:
 
         # looking left
         left = -1
-        while (self.validposition(r + left, f)):
+        while (self.validposition((r + left, f))):
 
             if self.locations[r + left][f][0] == ' ':
                 res.append((r + left, f))
@@ -309,7 +309,7 @@ class Board:
 
         # looking up
         up = 1
-        while (self.validposition(r, f + up)):
+        while (self.validposition((r, f + up))):
 
             if self.locations[r][f + up][0] == ' ':
                 res.append((r, f + up))
@@ -323,7 +323,7 @@ class Board:
 
         # looking down
         down = -1
-        while (self.validposition(r, f + down)):
+        while (self.validposition((r, f + down))):
 
             if self.locations[r][f + down][0] == ' ':
                 res.append((r, f + down))
@@ -337,6 +337,14 @@ class Board:
 
 
         return res
+    
+    def print_moves(self, loc):
+        moves = self.get_moves(loc)
+        output = []
+
+        for move in moves:
+            output.append(self.to_notation(move))
+        return output
 
     def get_moves(self, loc) -> list:
 
@@ -404,11 +412,11 @@ class Board:
 
         return True
 
-    def validposition(self, code_loc) -> bool:
+    def validposition(self, code_loc:tuple) -> bool:
         r = code_loc[0]
         f = code_loc[1]
         return r >= 0 and r <= 7 and f >= 0 and f <= 7
-
+    
     def toggle_turn(self):
         if self.turn == 'W':
             self.turn = 'B'
@@ -419,12 +427,12 @@ class Board:
 if __name__ == '__main__':
     sample = Board()
     sample.print_board()
-    # print("Rook",   sample.get_moves('A!'))
-    # print("Knight", sample.get_moves(0, 1))
-    # print("Bishop", sample.get_moves(0, 2))
-    # print("Queen",  sample.get_moves(0, 3))
-    # print("King",   sample.get_moves(0, 4))
-    # print("Pawn",   sample.get_moves(1, 1))
+    print("Rook",   sample.print_moves('A1'))
+    print("Knight", sample.print_moves('B1'))
+    print("Bishop", sample.print_moves('C1'))
+    print("Queen",  sample.print_moves('D1'))
+    print("King",   sample.print_moves('E1'))
+    print("Pawn",   sample.print_moves('E2'))
 
     # print("")
     # sample.move(1, 1, 3, 1)
