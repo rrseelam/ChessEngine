@@ -14,24 +14,26 @@ class Board:
                           [None, None, None, None, None, None, None, None],
                           [None, None, None, None, None, None, None, None]]
 
-        self.white_pieces = {
-            'P': ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2'],
-            'R': ['A1', 'H1'],
-            'N': ['B1', 'G1'],
-            'B': ['C1', 'F1'],
-            'Q': ['D1'],
-            'K': ['E1'],
-        }
+        self.pieces = {
+            'W': {
+                    'P': ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2'],
+                    'R': ['A1', 'H1'],
+                    'N': ['B1', 'G1'],
+                    'B': ['C1', 'F1'],
+                    'Q': ['D1'],
+                    'K': ['E1'],
+                 },
 
-        self.white_pieces = {
-            'P': ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7'],
-            'R': ['A8', 'H8'],
-            'N': ['B8', 'G8'],
-            'B': ['C8', 'F8'],
-            'Q': ['D8'],
-            'K': ['E8'],
+            'B': {
+                    'P': ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7'],
+                    'R': ['A8', 'H8'],
+                    'N': ['B8', 'G8'],
+                    'B': ['C8', 'F8'],
+                    'Q': ['D8'],
+                    'K': ['E8'],
+                 }
         }
-
+       
         self.set_loc('A1', ('R', 'W'))
         self.set_loc('B1', ('N', 'W'))
         self.set_loc('C1', ('B', 'W'))
@@ -395,20 +397,30 @@ class Board:
         moves = self.get_moves(start_loc)
 
         piece = self.get_loc(start_loc)
-        id = piece[0]
-        color = piece[1]
+        p_id = piece[0]
+        p_color = piece[1]
 
-        moves = []
+        target = self.get_loc(end_loc)
+        t_id = target[0]
+        t_color = target[1]
 
-        if color != self.turn:
+        moves = self.get_moves(start_loc)
+
+        if p_color != self.turn:
             return False
 
-        if end_loc not in moves:
+        if self.to_code(end_loc) not in moves:
             return False
-
+        
         self.set_loc(end_loc, piece)
         self.set_loc(start_loc, (' ', ' '))
         self.toggle_turn()
+
+        self.pieces[p_color][p_id].remove(start_loc)
+        self.pieces[p_color][p_id].append(end_loc)
+        
+        if t_id != ' ':
+            self.pieces[t_color][t_id].remove(end_loc)
 
         return True
 
@@ -433,6 +445,11 @@ if __name__ == '__main__':
     print("Queen",  sample.print_moves('D1'))
     print("King",   sample.print_moves('E1'))
     print("Pawn",   sample.print_moves('E2'))
+    sample.move('B1', 'C3')
+    sample.print_board()
+    print("Knight", sample.print_moves('C3'))
+
+    print(sample.pieces)
 
     # print("")
     # sample.move(1, 1, 3, 1)
