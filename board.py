@@ -200,12 +200,30 @@ class Board:
 
     def check_pawn_moves(self, r, f, color):
         dir = 0
+        not_moved = False
         if color == 'W':
             dir = 1
+            not_moved = f == 1
         else:
             dir = -1
+            not_moved = f == 6
         
-        not_moved = r == 6 or r == 1
+        moves = []
+        # currently cannot handle changing to queen at the end of the board
+   
+        if self.validposition((r, f + dir)) and self.locations[r][f + dir][0] == ' ':
+            moves.append((r, f + dir))
+
+            if not_moved and self.validposition((r, f + dir + dir)) and self.locations[r][f + dir + dir][0] == ' ':
+                moves.append((r, f + dir + dir))
+
+        if self.validposition((r + 1, f + dir)) and self.locations[r + 1][f + dir][0] != ' ' and self.locations[r + 1][f + dir][1] != color:
+            moves.append((r + 1, f + dir))
+
+        if self.validposition((r - 1, f + dir)) and self.locations[r - 1][f + dir][0] != ' ' and self.locations[r - 1][f + dir][1] != color:
+            moves.append((r - 1, f + dir))
+
+        return moves
 
     def check_diagonal_moves(self, r, f, color):
 
@@ -363,7 +381,7 @@ class Board:
         if id == ' ':
             pass
         elif id == 'P':
-            pass
+            moves = self.check_pawn_moves(r, f, color)
         elif id == 'R':
             moves += self.check_straight_moves(r, f, color)
 
@@ -422,6 +440,11 @@ class Board:
         if t_id != ' ':
             self.pieces[t_color][t_id].remove(end_loc)
 
+        if end_loc[1] == 7 and p_id == 'P':
+            self.set_loc((end_loc) , ('Q', p_color))
+            self.pieces[p_color]['Q'].append(self.to_notation(end_loc))
+            self.pieces[p_color]['P'].remove(self.to_notation(end_loc))
+
         return True
 
     def validposition(self, code_loc:tuple) -> bool:
@@ -448,6 +471,16 @@ if __name__ == '__main__':
     sample.move('B1', 'C3')
     sample.print_board()
     print("Knight", sample.print_moves('C3'))
+    print("Rook",   sample.print_moves('A1'))
+    print("Knight", sample.print_moves('B1'))
+    print("Bishop", sample.print_moves('C1'))
+    print("Queen",  sample.print_moves('D1'))
+    print("Pawn",   sample.print_moves('E2'))
+    print("Pawn",   sample.print_moves('E7'))
+    sample.move('E7', 'E5')
+    sample.print_board()
+    print("Pawn",   sample.print_moves('E5'))
+    
 
     print(sample.pieces)
 
