@@ -106,7 +106,6 @@ class Board:
 
     def set_loc(self, loc, change) -> tuple:
         code = self.to_code(loc)
-        print(f"code {code}")
         res = self.locations[code[0]][code[1]]
         self.locations[code[0]][code[1]] = change
         return res
@@ -120,49 +119,49 @@ class Board:
         return self.locations[code[0]][code[1]]
 
     def to_notation(self, loc) -> str:
-        r = 0
-        print(loc)
-        match loc[0]:
-            case 'A':
-                r = 0
-            case 'B':
-                r = 0
-            case 'C':
-                r = 0
-            case 'D':
-                r = 0
-            case 'E':
-                r = 0
-            case 'F':
-                r = 0
-            case 'G':
-                r = 0
-            case 'H':
-                r = 0
+        r = 'T'
+        
+        if loc[0] == 0:
+            r = 'A'
+        elif loc[0] == 1:
+            r = 'B'
+        elif loc[0] == 2:
+            r = 'C'
+        elif loc[0] == 3:
+            r = 'D'
+        elif loc[0] == 4:
+            r = 'E'
+        elif loc[0] == 5:
+            r = 'F'
+        elif loc[0] == 6:
+            r = 'G'
+        elif loc[0] == 7:
+            r = 'H'
+
 
         f = str(loc[1] + 1)  
-        return (r, f)
+        return r + f
 
     def to_code(self, loc) -> tuple:
-        print(loc)
+
         r = 0
-        match loc[0]:
-            case 0:
-                r = 'A'
-            case 1:
-                r = 'B'
-            case 2:
-                r = 'C'
-            case 3:
-                r = 'D'
-            case 4:
-                r = 'E'
-            case 5:
-                r = 'F'
-            case 6:
-                r = 'G'
-            case 7:
-                r = 'H'
+        
+        if loc[0] == 'A':
+                r = 0
+        elif loc[0] == 'B':
+                r = 1
+        elif loc[0] == 'C':
+            r = 2
+        elif loc[0] == 'D':
+                r = 3
+        elif loc[0] == 'E':
+            r = 4
+        elif loc[0] == 'F':
+            r = 5
+        elif loc[0] == 'G':
+            r = 6
+        elif loc[0] == 'H':
+            r = 7
 
         f = int(loc[1]) - 1
         return (r, f)
@@ -171,7 +170,7 @@ class Board:
 
         output = ""
 
-        output += f"  A B C D E F G  \n"
+        output += f"  ABCDEFGH \n"
         output += f"8 {self.get_loc('A8')[0]}{self.get_loc('B8')[0]}{self.get_loc('C8')[0]}{self.get_loc('D8')[0]}{self.get_loc('E8')[0]}{self.get_loc('F8')[0]}{self.get_loc('G8')[0]}{self.get_loc('H8')[0]} 8\n"
         output += f"7 {self.get_loc('A7')[0]}{self.get_loc('B7')[0]}{self.get_loc('C7')[0]}{self.get_loc('D7')[0]}{self.get_loc('E7')[0]}{self.get_loc('F7')[0]}{self.get_loc('G7')[0]}{self.get_loc('H7')[0]} 7\n"
         output += f"6 {self.get_loc('A6')[0]}{self.get_loc('B6')[0]}{self.get_loc('C6')[0]}{self.get_loc('D6')[0]}{self.get_loc('E6')[0]}{self.get_loc('F6')[0]}{self.get_loc('G6')[0]}{self.get_loc('H6')[0]} 6\n"
@@ -179,8 +178,8 @@ class Board:
         output += f"4 {self.get_loc('A4')[0]}{self.get_loc('B4')[0]}{self.get_loc('C4')[0]}{self.get_loc('D4')[0]}{self.get_loc('E4')[0]}{self.get_loc('F4')[0]}{self.get_loc('G4')[0]}{self.get_loc('H4')[0]} 4\n"
         output += f"3 {self.get_loc('A3')[0]}{self.get_loc('B3')[0]}{self.get_loc('C3')[0]}{self.get_loc('D3')[0]}{self.get_loc('E3')[0]}{self.get_loc('F3')[0]}{self.get_loc('G3')[0]}{self.get_loc('H3')[0]} 3\n"
         output += f"2 {self.get_loc('A2')[0]}{self.get_loc('B2')[0]}{self.get_loc('C2')[0]}{self.get_loc('D2')[0]}{self.get_loc('E2')[0]}{self.get_loc('F2')[0]}{self.get_loc('G2')[0]}{self.get_loc('H2')[0]} 2\n"
-        output += f"1 {self.get_loc('A1')[0]}{self.get_loc('B1')[0]}{self.get_loc('C1')[0]}{self.get_loc('D1')[0]}{self.get_loc('E1')[0]}{self.get_loc('F1')[0]}{self.get_loc('G1')[0]}{self.get_loc('H1')[0]} 2\n"
-        output += f"  A B C D E F G  \n"
+        output += f"1 {self.get_loc('A1')[0]}{self.get_loc('B1')[0]}{self.get_loc('C1')[0]}{self.get_loc('D1')[0]}{self.get_loc('E1')[0]}{self.get_loc('F1')[0]}{self.get_loc('G1')[0]}{self.get_loc('H1')[0]} 1\n"
+        output += f"  ABCDEFGH \n"
 
         print(output)
 
@@ -196,6 +195,15 @@ class Board:
             res.append((rank, file))
 
         return res
+
+    def check_pawn_moves(self, r, f, color):
+        dir = 0
+        if color == 'W':
+            dir = 1
+        else:
+            dir = -1
+        
+        not_moved = r == 6 or r == 1
 
     def check_diagonal_moves(self, r, f, color):
 
@@ -342,37 +350,36 @@ class Board:
 
         moves = []
 
-        match id:
-            case ' ':
-                pass
-            case 'P':
-                pass
-            case 'R':
-                moves += self.check_straight_moves(r, f, color)
+        if id == ' ':
+            pass
+        elif id == 'P':
+            pass
+        elif id == 'R':
+            moves += self.check_straight_moves(r, f, color)
 
-            case 'N':
+        elif id == 'N':
 
-                pos = [(r + 2, f + 1), (r + 2, f - 1),
-                       (r - 2, f + 1), (r - 2, f - 2),
-                       (r + 1, f + 2), (r + 1, f - 2),
-                       (r - 1, f + 2), (r - 1, f - 2)]
+            pos = [(r + 2, f + 1), (r + 2, f - 1),
+                    (r - 2, f + 1), (r - 2, f - 2),
+                    (r + 1, f + 2), (r + 1, f - 2),
+                    (r - 1, f + 2), (r - 1, f - 2)]
 
-                moves += self.check_discrete_moves(pos, color)
+            moves += self.check_discrete_moves(pos, color)
 
-            case 'B':
-                moves += self.check_diagonal_moves(r, f, color)
+        elif id == 'B':
+            moves += self.check_diagonal_moves(r, f, color)
 
-            case 'Q':
-                moves += self.check_diagonal_moves(r, f, color)
-                moves += self.check_straight_moves(r, f, color)
+        elif id == 'Q':
+            moves += self.check_diagonal_moves(r, f, color)
+            moves += self.check_straight_moves(r, f, color)
 
-            case 'K':
+        elif id == 'K':
 
-                pos = [(r + 1, f - 1), (r + 1, f), (r + 1, f + 1),
-                       (r, f - 1),                  (r, f + 1),
-                       (r - 1, f - 1), (r - 1, f), (r - 1, f + 1)]
+            pos = [(r + 1, f - 1), (r + 1, f), (r + 1, f + 1),
+                    (r, f - 1),                  (r, f + 1),
+                    (r - 1, f - 1), (r - 1, f), (r - 1, f + 1)]
 
-                moves += self.check_discrete_moves(pos, color)
+            moves += self.check_discrete_moves(pos, color)
 
         return moves
 
