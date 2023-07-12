@@ -33,7 +33,7 @@ class Board:
                     'K': ['E8'],
                  }
         }
-       
+               
         self.set_loc('A1', ('R', 'W'))
         self.set_loc('B1', ('N', 'W'))
         self.set_loc('C1', ('B', 'W'))
@@ -410,6 +410,139 @@ class Board:
             moves += self.check_discrete_moves(pos, color)
 
         return moves
+    
+    def in_check(self, color):
+        state = self.locations
+        king_loc = self.locations[color]['K']
+        king_loc_code = self.to_code(king_loc)
+        
+        rank = king_loc_code[0]
+        file = king_loc_code[1]
+
+        possible_positions = {
+            'P': [(1,-1), (1,1)],
+            'N': [(2, 1), (2,-1),(-2, 1), (-2, -2),
+                  (1, 2), (1, -2), (-1, 2), (1, -2)],
+        }
+
+        #checks pawn and knight positions
+        for key, value in possible_positions.items():
+            for pos in value:
+                checkrank, checkfile = rank + pos[0], file + pos[1]
+                if self.validposition((checkrank, checkfile)) and state[checkrank][checkfile][0] == key:
+                    if state[checkrank][checkfile][1] != color:
+                        return True
+                
+    
+        #check rook, bishop, and queen positions
+        #rook + queen checks    
+        #check upwards
+        up = file + 1
+        while up <= 7:
+            current_piece = state[rank][up]
+            if current_piece[0] == '.':
+                up += 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'R' or current_piece[0] == 'Q':
+                        return True
+                break
+
+        #check downwards
+        down = file - 1
+        while down >= 0:
+            current_piece = state[rank][down]
+            if current_piece[0] == '.':
+                down -= 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'R' or current_piece[0] == 'Q':
+                        return True
+                break
+    
+        #check right
+        right = rank + 1
+        while right <= 7:
+            current_piece = state[right][file]
+            if current_piece[0] == '.':
+                right += 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'R' or current_piece[0] == 'Q':
+                        return True
+                break
+    
+        #check left
+        left = rank - 1
+        while left >= 0:
+            current_piece = state[left][file]
+            if current_piece[0] == '.':
+                left -= 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'R' or current_piece[0] == 'Q':
+                        return True
+                break
+
+        #bishop + queen checks
+        # up-right diagonal
+        right = 1
+        up = 1
+        while (self.validposition((rank + right, file + up))):
+            current_piece = state[rank + right][file + up]
+            if current_piece[0] == '.':
+                right += 1
+                up += 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'B' or current_piece[0] == 'Q':
+                        return True
+                break            
+
+        # up-left diagonal
+        left = -1
+        up = 1
+        while (self.validposition((rank + left, file + up))):
+            current_piece = state[rank + left][file + up]
+            if current_piece[0] == '.':
+                left -= 1
+                up += 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'B' or current_piece[0] == 'Q':
+                        return True
+                break
+    
+        # down-right diagonal
+        right = 1
+        down = -1
+        while (self.validposition((rank + right, file + down))):
+            current_piece = state[rank + right][file + down]
+            if current_piece[0] == '.':
+                right += 1
+                down -= 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'B' or current_piece[0] == 'Q':
+                        return True
+                break            
+
+        # down-left diagonal
+        left = -1
+        down = -1
+        while (self.validposition((rank + left, file + down))):
+            current_piece = state[rank + left][file + down]
+            if current_piece[0] == '.':
+                left -= 1
+                down -= 1
+            else:
+                if current_piece[1] != color:
+                    if current_piece[0] == 'B' or current_piece[0] == 'Q':
+                        return True
+                break  
+
+        return False
+
 
     def move(self, start_loc, end_loc) -> bool:
         moves = self.get_moves(start_loc)
@@ -444,7 +577,7 @@ class Board:
             self.set_loc((end_loc) , ('Q', p_color))
             self.pieces[p_color]['Q'].append(self.to_notation(end_loc))
             self.pieces[p_color]['P'].remove(self.to_notation(end_loc))
-
+            
         return True
 
     def validposition(self, code_loc:tuple) -> bool:
