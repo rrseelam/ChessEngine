@@ -545,17 +545,16 @@ class Board:
 
 
     def move(self, start_loc, end_loc) -> bool:
-        moves = self.get_moves(start_loc)
 
+        moves = self.get_moves(start_loc)
         piece = self.get_loc(start_loc)
+
         p_id = piece[0]
         p_color = piece[1]
 
         target = self.get_loc(end_loc)
         t_id = target[0]
         t_color = target[1]
-
-        moves = self.get_moves(start_loc)
 
         if p_color != self.turn:
             return False
@@ -591,6 +590,17 @@ class Board:
         else:
             self.turn = 'W'
 
+    def is_game_over(self):
+        if len(self.pieces['W']['K']) == 0:
+            return True
+        if len(self.pieces['B']['K']) == 0:
+            return True
+        return False
+    
+    def winner(self):
+        if len(self.pieces['W']['K']) == 0:
+            return 'W'
+        return 'B'
 
 if __name__ == '__main__':
     sample = Board()
