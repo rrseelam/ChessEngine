@@ -9,7 +9,6 @@ game.print_board()
 HR = Heuristic_Model()
 
 
-
 while True:
     print("input a move:")
     start = input("start = ")
