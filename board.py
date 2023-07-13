@@ -566,11 +566,11 @@ class Board:
         self.set_loc(end_loc, piece)
         self.set_loc(start_loc, (' ', ' '))
 
-        if self.in_check(p_color):
-            # revert, quit
-            self.set_loc(start_loc, piece)
-            self.set_loc(end_loc, target) 
-            return False
+        # if self.in_check(p_color):
+        #     # revert, quit
+        #     self.set_loc(start_loc, piece)
+        #     self.set_loc(end_loc, target) 
+        #     return False
 
         # updating the class vars: 
         self.move_count += 1
