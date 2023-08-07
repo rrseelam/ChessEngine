@@ -48,3 +48,40 @@ class Heuristic_Model:
                     diff -= len(b.get_moves(loc))
                     
         return diff
+    
+    def diff_pawn_development(self, b: Board) -> int:
+        diff = 0
+        
+        for white_pawn in b.pieces['W']['P']:
+            pawn_pos = b.to_code(white_pawn)
+            diff += pawn_pos[1] - 1
+            
+        for black_pawn in b.pieces['B']['P']:
+            pawn_pos = b.to_code(black_pawn)
+            diff -= abs(pawn_pos[1] - 6)
+            
+        return diff
+    
+    def diff_overall_development(self, b: Board) -> int:
+        diff = 0
+        
+        for piece, positions in b.pieces['W'].items():
+            for position in positions:
+                curr_position = b.to_code(position)
+                if piece == 'P':
+                    diff += curr_position[1] - 1
+                else:
+                    diff += curr_position[1] - 0
+            
+            
+        for piece, positions in b.pieces['B'].items():
+            for position in positions:
+                curr_position = b.to_code(position)
+                if piece == 'P':
+                    diff -= abs(curr_position[1] - 6)
+                else:
+                    diff -= abs(curr_position[1] - 7)
+                    
+        return diff
+            
+         
