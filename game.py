@@ -3,7 +3,6 @@ from heuristics import Heuristic_Model
 
 game = Board()
 HR = Heuristic_Model()
-
 game.print_board()
 
 while not game.is_game_over():
