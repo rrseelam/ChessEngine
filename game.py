@@ -1,15 +1,12 @@
-
 from board import Board
 from heuristics import Heuristic_Model
 
 game = Board()
+HR = Heuristic_Model()
 
 game.print_board()
 
-HR = Heuristic_Model()
-
-
-while True:
+while not game.is_game_over():
     print("input a move:")
     start = input("start = ")
     end = input("end = ")

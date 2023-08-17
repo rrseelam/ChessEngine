@@ -1,5 +1,4 @@
 
-
 class Board:
 
     def __init__(self):
@@ -211,7 +210,6 @@ class Board:
         
         moves = []
         # currently cannot handle changing to queen at the end of the board
-   
         if self.validposition((r, f + dir)) and self.locations[r][f + dir][0] == ' ':
             moves.append((r, f + dir))
 
@@ -546,6 +544,8 @@ class Board:
 
 
     def move(self, start_loc, end_loc) -> bool:
+        if not self.validmoveinput(start_loc) or not self.validmoveinput(end_loc):
+            return False
 
         moves = self.get_moves(start_loc)
         piece = self.get_loc(start_loc)
@@ -593,6 +593,18 @@ class Board:
         r = code_loc[0]
         f = code_loc[1]
         return r >= 0 and r <= 7 and f >= 0 and f <= 7
+    
+    def validmoveinput(self, user_input) -> bool:
+        if len(user_input) != 2:
+            return False
+        #check letter
+        if user_input[0] < 'A' or user_input > 'H':
+            return False
+        #check number
+        if user_input[1] < '1' or user_input[1] > '8':
+            return False
+        
+        return True
     
     def toggle_turn(self):
         if self.turn == 'W':

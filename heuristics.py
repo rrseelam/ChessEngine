@@ -83,5 +83,15 @@ class Heuristic_Model:
                     diff -= abs(curr_position[1] - 7)
                     
         return diff
-            
-         
+    
+    def combined_hueristic_evaluation(self, b: Board) -> float:
+        if self.game_win(b) != 0:
+            return self.game_win(b) * float('inf')
+        else:
+            total = 0
+            total += self.diff_area_control(b)
+            total += self.diff_overall_development(b)
+            total += self.diff_pawn_development(b)
+            total += self.diff_piece_value(b)
+
+            return total
