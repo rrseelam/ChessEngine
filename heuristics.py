@@ -16,6 +16,16 @@ class Heuristic_Model:
         return 0
     
     def diff_piece_value(self, b: Board) -> float:
+        """
+        Max Value Estimate:
+        One side has no pieces and the other has all. 
+        8 Pawns = 8
+        2 Rooks = 20.62
+        2 Knights = 12.4
+        2 Bishops = 13.1
+        1 Queen = 20.14
+        Total = 8 + 20.62 + 12.4 + 13.1 + 20.14 = 74.26
+        """
         diff = 0
 
         diff += len(b.pieces['W']['P']) * 1
@@ -33,9 +43,18 @@ class Heuristic_Model:
         diff += len(b.pieces['W']['Q']) * 20.14
         diff -= len(b.pieces['B']['Q']) * 20.14
 
-        return diff
+        return diff / 76.26
     
     def diff_area_control(self, b: Board) -> float:
+        """
+        Max Value Estimate:
+        Pawn: Can only control front, 8 * 1 = 8
+        Rook: Control rank and file, 7 * 2 * 2 = 28
+        Knight: Controls all 8 possible squares, 8 * 2 = 16
+        Bishop: Same as Rook, 7 * 2 * 2 = 28
+        Queen: Rook + Bishop = 56
+        Total = 8 + 28 + 28 + 16 + 56 = 136
+        """
         diff = 0
 
         for i in range(0, 8):
@@ -47,9 +66,13 @@ class Heuristic_Model:
                 if b.get_loc(loc)[1] == 'B':
                     diff -= len(b.get_moves(loc))
                     
-        return diff
+        return diff / 136
     
     def diff_pawn_development(self, b: Board) -> int:
+        """
+        Max Value Estimate:
+        Pawn: Can move 6 up, 8 * 6 = 48
+        """
         diff = 0
         
         for white_pawn in b.pieces['W']['P']:
@@ -60,9 +83,15 @@ class Heuristic_Model:
             pawn_pos = b.to_code(black_pawn)
             diff -= abs(pawn_pos[1] - 6)
             
-        return diff
+        return diff / 48
     
     def diff_overall_development(self, b: Board) -> int:
+        """
+        Max Value Estimate:
+        Pawn: Can move 6 up, 8 * 6 = 48
+        Every other piece can move up 7, 7 * 8 = 56
+        Total: 48 + 56 = 104
+        """
         diff = 0
         
         for piece, positions in b.pieces['W'].items():
@@ -82,17 +111,16 @@ class Heuristic_Model:
                 else:
                     diff -= abs(curr_position[1] - 7)
                     
-        return diff
+        return diff / 104
     
-    #need to scale individual heuristics to 0-1
     def combined_hueristic_evaluation(self, b: Board) -> float:
         if self.game_win(b) != 0:
             return self.game_win(b) * float('inf')
         else:
             total = 0
-            total += self.diff_area_control(b)
-            total += self.diff_overall_development(b)
-            total += self.diff_pawn_development(b)
-            total += self.diff_piece_value(b)
+            total += 0.25 * self.diff_area_control(b)
+            total += 0.25 * self.diff_overall_development(b)
+            total += 0.25 * self.diff_pawn_development(b)
+            total += 0.25 * self.diff_piece_value(b)
 
             return total
