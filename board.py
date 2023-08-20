@@ -537,7 +537,7 @@ class Board:
         t_color = target[1]
 
         if p_color != self.turn:
-            print('Wrong color piece')
+            print(start_loc,'Wrong color piece')
             return False
 
         if self.to_code(end_loc) not in moves:

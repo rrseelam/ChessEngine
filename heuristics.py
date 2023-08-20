@@ -84,6 +84,7 @@ class Heuristic_Model:
                     
         return diff
     
+    #need to scale individual heuristics to 0-1
     def combined_hueristic_evaluation(self, b: Board) -> float:
         if self.game_win(b) != 0:
             return self.game_win(b) * float('inf')
