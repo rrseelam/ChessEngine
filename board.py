@@ -232,7 +232,7 @@ class Board:
         up = 1
         right = 1
         while (self.validposition((r + right, f + up))):
-            if self.locations[r+right][f+up] == ' ':
+            if self.locations[r+right][f+up][0] == ' ':
                 res.append((r + right, f + up))
                 up += 1
                 right += 1
